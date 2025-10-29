@@ -3,7 +3,10 @@
 // ... (disassembleWord, checkGuess, assembleJamo 함수는 이전과 완전히 동일) ...
 
 const hangul = require('hangul-js');
-const { createCanvas } = require('canvas');
+const { createCanvas, registerFont } = require('canvas');
+const path = require('path');
+
+registerFont(path.join(__dirname, 'fonts', 'NanumGothicExtraBold.ttf'), { family: 'NanumGothic' });
 
 function disassembleWord(word) {
   const jamoArray = hangul.disassemble(word);
@@ -47,7 +50,7 @@ async function generateImage(guessesJamo, results, options = {}) {
   const ctx = canvas.getContext('2d');
   ctx.fillStyle = '#1A1A1B';
   ctx.fillRect(0, 0, WIDTH, HEIGHT);
-  ctx.font = `${FONT_SIZE}px 'Noto Sans KR', sans-serif`; 
+  ctx.font = `${FONT_SIZE}px 'NanumGothic'`; 
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
   for (let r = 0; r < 6; r++) {
