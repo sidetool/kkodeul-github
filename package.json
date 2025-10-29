@@ -11,5 +11,8 @@
     "discord.js": "^14.13.0",
     "hangul-js": "^0.2.6",
     "node-cron": "^3.0.2"
+  },
+  "engines": {
+    "node": "20.19.5"
   }
 }
