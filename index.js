@@ -2,7 +2,10 @@
 
 // 1. discord.js 및 필요 모듈 불러오기
 const { Client, GatewayIntentBits, REST, Routes, SlashCommandBuilder, InteractionType, AttachmentBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
-const { token, clientId, guildId } = require('./config.json');
+// [수정] config.json 대신 환경 변수(process.env)에서 설정값을 불러옵니다.
+const token = process.env.DISCORD_TOKEN;
+const clientId = process.env.CLIENT_ID;
+// const { token, clientId, guildId } = require('./config.json');
 const cron = require('node-cron'); 
 
 const { disassembleWord, checkGuess, assembleJamo, rawDisassemble, generateImage, generateDuelImage } = require('./kkodeul_engine.js');
@@ -54,10 +57,10 @@ const rest = new REST({ version: '10' }).setToken(token);
   try {
     console.log('[시스템] 슬래시(/) 명령어 등록을 시작합니다...');
     await rest.put(
-      Routes.applicationGuildCommands(clientId, guildId),
+      Routes.applicationCommands(clientId),
       { body: commands },
     );
-    console.log('[시스템] 슬래시(/) 명령어가 테스트 서버에 성공적으로 등록되었습니다.');
+    console.log('[시스템] 슬래시(/) 명령어가 모든 서버에 성공적으로 등록되었습니다.');
   } catch (error) {
     console.error("명령어 등록 실패:", error);
   }
