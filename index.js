@@ -5,6 +5,7 @@ const { Client, GatewayIntentBits, REST, Routes, SlashCommandBuilder, Interactio
 // [수정] config.json 대신 환경 변수(process.env)에서 설정값을 불러옵니다.
 const token = process.env.DISCORD_TOKEN;
 const clientId = process.env.CLIENT_ID;
+const http = require('http'); // [추가] Health Check 서버를 위한 내장 http 모듈
 // const { token, clientId, guildId } = require('./config.json');
 const cron = require('node-cron'); 
 
@@ -320,6 +321,21 @@ client.on('interactionCreate', async interaction => {
           .addFields({ name: '👑 순위 (최대 연속 성공)', value: leaderboardEntries.join('\n') || '데이터 없음' }).setTimestamp().setFooter({ text: '게임을 플레이하여 순위를 올려보세요!' });
       await interaction.editReply({ embeds: [embed] });
   }
+});
+
+// 8. 봇 로그인 및 Health Check 서버 실행
+
+// [추가] Koyeb의 Health Check를 통과하기 위한 가짜 웹 서버
+const server = http.createServer((req, res) => {
+    res.writeHead(200, { "Content-Type": "text/plain" });
+    res.end("Bot is alive!");
+});
+
+// Koyeb이 제공하는 PORT 환경 변수를 사용하고, 없으면 로컬 테스트용으로 8080 포트를 사용
+const port = process.env.PORT || 8080;
+
+server.listen(port, () => {
+    console.log(`[시스템] Health check 서버가 ${port}번 포트에서 실행 중입니다.`);
 });
 
 // 8. 봇 로그인
